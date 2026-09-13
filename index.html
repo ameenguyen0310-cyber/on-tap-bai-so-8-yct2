@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YCT 2 - Lesson 8 / Bài 8: 马丁比我大三岁</title>
+  <!-- Thư viện HanziWriter tạo GIF nét chữ & chấm điểm tương tác bút thuận -->
+  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+  <style>
+    :root {
+      --primary: #2563EB;
+      --primary-dark: #1D4ED8;
+      --secondary: #10B981;
+      --accent: #F59E0B;
+      --danger: #EF4444;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text: #1E293B;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 90px; }
+
+    header {
+      background: linear-gradient(135deg, #1E40AF, #3B82F6);
+      color: white;
+      text-align: center;
+      padding: 25px 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    header h1 { font-size: 1.8rem; margin-bottom: 6px; }
+    header p { font-size: 1.05rem; opacity: 0.9; }
+
+    /* Sticky Navigation Tabs */
+    nav.nav-tabs {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow-x: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-bottom: 1px solid #E2E8F0;
+      padding-right: 15px;
+    }
+    .tabs-wrapper { display: flex; overflow-x: auto; }
+    nav.nav-tabs button.tab-link {
+      flex: 0 0 auto;
+      padding: 14px 18px;
+      border: none;
+      background: transparent;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #64748B;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    nav.nav-tabs button.tab-link:hover, nav.nav-tabs button.tab-link.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      background: #EFF6FF;
+    }
+
+    .container { max-width: 920px; margin: 20px auto; padding: 0 15px; }
+
+    /* Skill Content Container */
+    .skill-panel { display: none; background: var(--card-bg); border-radius: 16px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .skill-panel.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .skill-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--primary-dark);
+      font-size: 1.3rem;
+      border-bottom: 2px solid #E2E8F0;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    .skill-badge { background: var(--primary); color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.85rem; }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: #E2E8F0; color: #334155; }
+    .btn-secondary:hover { background: #CBD5E1; }
+    .btn-audio { background: #FEF3C7; color: #D97706; border: 1px solid #FCD34D; }
+    .btn-audio:hover { background: #FDE68A; }
+    .btn-submit { background: var(--secondary); color: white; font-size: 1rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+    .btn-submit:hover { background: #059669; }
+
+    /* Reading Audio Bar */
+    .reading-audio-bar {
+      background: #EFF6FF;
+      border: 1.5px solid #BFDBFE;
+      padding: 14px 18px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Quiz Cards */
+    .quiz-card { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+    .quiz-card .q-title { font-weight: 700; margin-bottom: 6px; color: #0F172A; font-size: 1.15rem; letter-spacing: 0.5px; }
+    .quiz-card .q-sub { font-size: 0.92rem; color: #0369A1; font-weight: 500; margin-bottom: 12px; }
+
+    .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+    .opt-btn {
+      background: white;
+      border: 2px solid #CBD5E1;
+      padding: 12px 14px;
+      border-radius: 8px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 1.05rem;
+      transition: all 0.2s;
+    }
+    .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: #EFF6FF; }
+    .opt-btn.correct { background: #DEF7EC !important; border-color: var(--secondary) !important; color: #03543F !important; font-weight: bold; }
+    .opt-btn.wrong { background: #FDE8E8 !important; border-color: var(--danger) !important; color: #9B1C1C !important; }
+    .opt-btn.correct-highlight { background: #DEF7EC !important; border-color: var(--secondary) !important; color: #03543F !important; font-weight: bold; border-style: dashed !important; }
+
+    /* Reading Box */
+    .reading-box {
+      background: #EFF6FF;
+      border-left: 5px solid var(--primary);
+      padding: 24px;
+      border-radius: 10px;
+      font-size: 1.35rem;
+      line-height: 2.2;
+      margin-bottom: 24px;
+      letter-spacing: 1.5px;
+      color: #0F172A;
+      font-family: "KaiTi", "楷体", "Microsoft YaHei", sans-serif;
+    }
+
+    /* Audio Practice */
+    .audio-card { background: #F8FAFC; border-radius: 12px; padding: 18px; margin-bottom: 16px; border: 1px solid #E2E8F0; }
+    .speed-btn-group { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+
+    /* Hanzi Writing Section with GIF + Interactive Box */
+    .hanzi-practice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 15px; }
+    .hanzi-card { text-align: center; border: 1.5px solid #E2E8F0; padding: 18px; border-radius: 14px; background: white; box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
+    .hanzi-card .char-header { font-size: 1.25rem; font-weight: 700; color: #1E293B; margin-bottom: 4px; }
+    .hanzi-card .char-sub { font-size: 0.88rem; color: #64748B; margin-bottom: 12px; }
+
+    .hanzi-box-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 10px;
+    }
+    .hanzi-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .hanzi-unit-label { font-size: 0.76rem; font-weight: 700; margin-bottom: 4px; }
+
+    .stroke-box {
+      width: 115px;
+      height: 115px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .stroke-box.gif-box {
+      background: #FFFBEB;
+      border: 1.5px solid #FCD34D;
+    }
+    .stroke-box.quiz-box {
+      background: #FFFFFF;
+      border: 1.5px dashed #3B82F6;
+      cursor: crosshair;
+    }
+
+    .status-msg {
+      font-size: 0.85rem;
+      min-height: 28px;
+      font-weight: 600;
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .badge-passed {
+      background: #DEF7EC;
+      color: #03543F;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid #86EFAC;
+      font-weight: 700;
+    }
+
+    /* Sentence Unscramble */
+    .word-pool, .sentence-target { display: flex; flex-wrap: wrap; gap: 8px; min-height: 52px; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+    .word-pool { background: #F1F5F9; }
+    .sentence-target { background: #FFF; border: 2px dashed #94A3B8; }
+    .chip {
+      background: white;
+      border: 1px solid #CBD5E1;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 1.05rem;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      user-select: none;
+    }
+    .chip:hover { border-color: var(--primary); color: var(--primary); }
+
+    .result-msg { font-weight: bold; margin-top: 10px; }
+
+    /* Bottom Sticky Bar */
+    .sticky-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: white;
+      border-top: 1px solid #E2E8F0;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+      z-index: 90;
+    }
+    .sticky-footer .progress-text { font-weight: 600; color: #475569; }
+
+    /* Modal Result */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+    .modal-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+    }
+    .score-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: #EFF6FF;
+      border: 6px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+    .score-circle.high { border-color: var(--secondary); color: var(--secondary); background: #ECFDF5; }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1001;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>YCT 2 - Bài 8 / Lesson 8: 马丁比我大三岁</h1>
+    <p>Hệ Thống Luyện Tập 7 Kỹ Năng Song Ngữ / 7-Skill Bilingual Practice System</p>
+  </header>
+
+  <!-- Sticky Navigation Tabs -->
+  <nav class="nav-tabs">
+    <div class="tabs-wrapper">
+      <button class="tab-link active" onclick="openSkill(0)">Skill 1: Nghe từ / Listening</button>
+      <button class="tab-link" onclick="openSkill(1)">Skill 2: Chọn chữ / Hanzi Pick</button>
+      <button class="tab-link" onclick="openSkill(2)">Skill 3: Ngữ pháp / Grammar</button>
+      <button class="tab-link" onclick="openSkill(3)">Skill 4: Đọc hiểu & Audio / Reading</button>
+      <button class="tab-link" onclick="openSkill(4)">Skill 5: Nghe & Đọc / Shadowing</button>
+      <button class="tab-link" onclick="openSkill(5)">Skill 6: Bút thuận GIF & Viết / Writing</button>
+      <button class="tab-link" onclick="openSkill(6)">Skill 7: Xếp câu / Unscramble</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- SKILL 1: NGHE VÀ CHỌN TỪ -->
+    <div class="skill-panel active" id="skill-0">
+      <div class="skill-title">
+        <span class="skill-badge">Skill 1</span>
+        <h2>Nghe và chọn từ đúng / Listening & Vocabulary Selection (5 câu)</h2>
+      </div>
+      <div id="skill1-container"></div>
+    </div>
+
+    <!-- SKILL 2: CHỌN CHỮ HÁN ĐÚNG -->
+    <div class="skill-panel" id="skill-1">
+      <div class="skill-title">
+        <span class="skill-badge">Skill 2</span>
+        <h2>Chọn Chữ Hán đúng / Select Correct Hanzi (5 câu)</h2>
+      </div>
+      <div id="skill2-container"></div>
+    </div>
+
+    <!-- SKILL 3: NGỮ PHÁP -->
+    <div class="skill-panel" id="skill-2">
+      <div class="skill-title">
+        <span class="skill-badge">Skill 3</span>
+        <h2>Ngữ pháp / Grammar Practice (5 câu)</h2>
+      </div>
+      <div id="skill3-container"></div>
+    </div>
+
+    <!-- SKILL 4: ĐỌC ĐOẠN VĂN & TRẢ LỜI CÂU HỎI -->
+    <div class="skill-panel" id="skill-3">
+      <div class="skill-title">
+        <span class="skill-badge">Skill 4</span>
+        <h2>Đọc hiểu đoạn văn & Audio / Reading Comprehension (5 câu)</h2>
+      </div>
+
+      <!-- THANH PHÁT AUDIO CHO ĐOẠN VĂN ĐỌC HIỂU -->
+      <div class="reading-audio-bar">
+        <span style="font-weight: 700; color: #1E40AF;">🎧 Nghe đọc cả bài / Audio:</span>
+        <button class="btn btn-audio" onclick="playReadingAudio(1.0)">🔊 Giọng chuẩn tự nhiên (1.0x)</button>
+        <button class="btn btn-audio" onclick="playReadingAudio(0.82)">🐢 Đọc chậm rõ nét (0.82x)</button>
+        <button class="btn btn-secondary" onclick="stopAudio()">⏹ Dừng / Stop</button>
+      </div>
+
+      <!-- ĐOẠN VĂN THUẦN CHỮ HÁN -->
+      <div class="reading-box" id="reading-text">
+        这是苏珊，这是马丁，他们是我的好朋友。苏珊和马丁是同学，也是小学生。马丁十一岁，苏珊十岁，我八岁。马丁比我大三岁，苏珊比我大两岁。哥哥比姐姐高，姐姐比我高，我比弟弟高。
+      </div>
+
+      <div id="skill4-container"></div>
+    </div>
+
+    <!-- SKILL 5: NGHE & NHẠI GIỌNG 2 TỐC ĐỘ -->
+    <div class="skill-panel" id="skill-4">
+      <div class="skill-title">
+        <span class="skill-badge">Skill 5</span>
+        <h2>Nghe & Nhại giọng 2 tốc độ / Shadowing (2 Speeds)</h2>
+      </div>
+      <div id="skill5-container"></div>
+    </div>
+
+    <!-- SKILL 6: TẬP VIẾT CHỮ HÁN CÓ MẪU BÚT THUẬN GIF & BẮT BUỘC ĐÚNG THỨ TỰ NÉT MỚI CHO QUA -->
+    <div class="skill-panel" id="skill-5">
+      <div class="skill-title">
+        <span class="skill-badge">Skill 6</span>
+        <h2>Bút thuận GIF & Luyện viết đúng thứ tự / Stroke Order GIF & Writing</h2>
+      </div>
+      <div class="hanzi-practice-grid" id="skill6-container"></div>
+    </div>
+
+    <!-- SKILL 7: SẮP XẾP TỪ THÀNH CÂU -->
+    <div class="skill-panel" id="skill-6">
+      <div class="skill-title">
+        <span class="skill-badge">Skill 7</span>
+        <h2>Sắp xếp từ thành câu / Sentence Unscramble (5 câu)</h2>
+      </div>
+      <div id="skill7-container"></div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Sticky Submit Bar -->
+  <div class="sticky-footer">
+    <div class="progress-text" id="footer-progress">Đã hoàn thành / Completed: 0 / 30 mục (items)</div>
+    <button class="btn btn-submit" onclick="submitTest()">📝 Nộp Bài & Tính Điểm / Submit Test</button>
+  </div>
+
+  <!-- Modal Display Result -->
+  <div class="modal-overlay" id="result-modal">
+    <div class="modal-card">
+      <h2 style="margin-bottom: 10px; color: #1E293B;">Kết Quả Bài Làm / Final Result</h2>
+      <div class="score-circle" id="modal-score-circle">0%</div>
+      <h3 id="modal-title" style="margin-bottom: 10px; font-size: 1.3rem;"></h3>
+      <p id="modal-detail" style="color: #64748B; margin-bottom: 20px; font-size: 0.95rem;"></p>
+      <button class="btn btn-primary" onclick="closeModal()" style="width: 100%; justify-content: center;">Đóng & Tiếp Tục / Close & Continue</button>
+    </div>
+  </div>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <script>
+    /* State Tracking */
+    const userAnswers = {};
+    const TOTAL_SCORED_QUESTIONS = 30;
+
+    function updateFooterProgress() {
+      const answeredCount = Object.keys(userAnswers).length;
+      document.getElementById('footer-progress').innerText = `Đã hoàn thành / Completed: ${answeredCount} / ${TOTAL_SCORED_QUESTIONS} mục (items)`;
+    }
+
+    function openSkill(idx) {
+      document.querySelectorAll('.skill-panel').forEach((el, i) => {
+        el.classList.toggle('active', i === idx);
+      });
+      document.querySelectorAll('.tab-link').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+      });
+      if (idx === 5) {
+        initSkill6();
+      }
+    }
+
+    /* =========================================================================
+       HỆ THỐNG ÂM THANH NỮ BẢN NGỮ CHUẨN XÁC, TỰ NHIÊN, KHÔNG LẶP TỪ / LẶP CÂU
+       - Đoạn văn được phát liền mạch trong một luồng nguyên khối có ngắt nghỉ tự nhiên.
+       - Cơ chế kiểm soát phiên phát (Session Lock) ngăn triệt để việc phát lặp hoặc chồng âm.
+    ========================================================================= */
+    let currentAudioObj = null;
+    let femaleVoiceObj = null;
+    let activePlaybackId = 0;
+
+    function loadGentleFemaleVoice() {
+      if (!('speechSynthesis' in window)) return;
+      const voices = window.speechSynthesis.getVoices();
+      
+      const femaleKeywords = [
+        'Xiaoxiao', '晓晓', 'Tingting', '婷婷', 'Xiaoyi', '晓依',
+        'Sinji', 'Huihui', 'Yaoyao', 'Google 普通话', 'Chinese China'
+      ];
+
+      for (const name of femaleKeywords) {
+        const found = voices.find(v => v.lang.includes('zh') && v.name.includes(name));
+        if (found) {
+          femaleVoiceObj = found;
+          return;
+        }
+      }
+
+      femaleVoiceObj = voices.find(v => (v.lang === 'zh-CN' || v.lang === 'zh_CN') &&
+        !v.name.toLowerCase().includes('male') &&
+        !v.name.toLowerCase().includes('yunxi') &&
+        !v.name.toLowerCase().includes('yunjian') &&
+        !v.name.toLowerCase().includes('kangkang')
+      ) || voices.find(v => v.lang.includes('zh'));
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = loadGentleFemaleVoice;
+      loadGentleFemaleVoice();
+    }
+
+    function stopAudio() {
+      activePlaybackId++; // Vô hiệu hóa phiên phát trước đó ngay lập tức
+      if (currentAudioObj) {
+        currentAudioObj.pause();
+        currentAudioObj.currentTime = 0;
+        currentAudioObj.onended = null;
+        currentAudioObj.onerror = null;
+        currentAudioObj = null;
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    function cleanHanziForSpeech(text) {
+      return text
+        .replace(/[_—…]+/g, '，')
+        .replace(/[a-zA-Z]/g, '')
+        .replace(/[^\u4e00-\u9fa50-9，。？！、]/g, '')
+        .replace(/，+/g, '，')
+        .trim();
+    }
+
+    // Phát âm từ / câu ngắn cho Skill 1, 3, 5, 7
+    function playAudio(rawText, rate = 1.0) {
+      stopAudio();
+      const thisSession = activePlaybackId;
+      const text = cleanHanziForSpeech(rawText);
+      if (!text) return;
+
+      const femaleNativeUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(text)}&le=zh`;
+      const audio = new Audio();
+      audio.src = femaleNativeUrl;
+      audio.playbackRate = rate;
+      currentAudioObj = audio;
+
+      let fallbackHandled = false;
+
+      audio.onended = () => {
+        if (activePlaybackId === thisSession) {
+          currentAudioObj = null;
+        }
+      };
+
+      const handleFail = () => {
+        if (fallbackHandled || activePlaybackId !== thisSession) return;
+        fallbackHandled = true;
+        currentAudioObj = null;
+        fallbackFemaleSynthesis(text, rate, thisSession);
+      };
+
+      audio.onerror = handleFail;
+
+      audio.play().catch(err => {
+        if (err.name === 'AbortError') return;
+        handleFail();
+      });
+    }
+
+    // PHÁT ĐOẠN VĂN ĐỌC HIỂU SKILL 4: PHÁT NGUYÊN KHỐI LIỀN MẠCH, SUÔNG CÂU, KHÔNG LẶP LẠI
+    function playReadingAudio(rate = 1.0) {
+      stopAudio();
+      const thisSession = activePlaybackId;
+
+      // Đoạn văn chuẩn đầy đủ câu chữ với dấu ngắt câu ngữ pháp chuẩn
+      const fullPassage = "这是苏珊，这是马丁，他们是我的好朋友。苏珊和马丁是同学，也是小学生。马丁十一岁，苏珊十岁，我八岁。马丁比我大三岁，苏珊比我大两岁。哥哥比姐姐高，姐姐比我高，我比弟弟高。";
+
+      const nativeUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(fullPassage)}&le=zh`;
+      const audio = new Audio();
+      audio.src = nativeUrl;
+      audio.playbackRate = rate;
+      currentAudioObj = audio;
+
+      let fallbackHandled = false;
+
+      audio.onended = () => {
+        if (activePlaybackId === thisSession) {
+          currentAudioObj = null;
+        }
+      };
+
+      const handleFail = () => {
+        if (fallbackHandled || activePlaybackId !== thisSession) return;
+        fallbackHandled = true;
+        currentAudioObj = null;
+        fallbackFemaleSynthesis(fullPassage, rate, thisSession);
+      };
+
+      audio.onerror = handleFail;
+
+      audio.play().catch(err => {
+        if (err.name === 'AbortError') return;
+        handleFail();
+      });
+    }
+
+    function fallbackFemaleSynthesis(text, rate, sessionId) {
+      if (!('speechSynthesis' in window) || activePlaybackId !== sessionId) return;
+      window.speechSynthesis.cancel();
+
+      if (!femaleVoiceObj) loadGentleFemaleVoice();
+
+      const msg = new SpeechSynthesisUtterance(text);
+      msg.lang = 'zh-CN';
+      msg.rate = rate * 0.88; // Tốc độ tự nhiên, rõ từng thanh điệu
+      msg.pitch = 1.04;       // Âm sắc thanh thoát, ấm áp
+
+      if (femaleVoiceObj) msg.voice = femaleVoiceObj;
+
+      window.speechSynthesis.speak(msg);
+    }
+
+    /* Option Selection Handler */
+    function selectOption(btn, isCorrect, correctIndex, resultId, qKey) {
+      const parent = btn.parentElement;
+      const buttons = parent.querySelectorAll('.opt-btn');
+      
+      buttons.forEach(b => {
+        b.disabled = true;
+        b.classList.remove('correct', 'wrong', 'correct-highlight');
+      });
+
+      userAnswers[qKey] = isCorrect;
+      updateFooterProgress();
+
+      const res = document.getElementById(resultId);
+      if (isCorrect) {
+        btn.classList.add('correct');
+        res.innerHTML = "<span style='color:var(--secondary);'>✔ Đúng rồi! / Correct! 非常好！</span>";
+      } else {
+        btn.classList.add('wrong');
+        buttons[correctIndex].classList.add('correct-highlight');
+        const correctText = buttons[correctIndex].innerText;
+        res.innerHTML = `<span style='color:var(--danger);'>✘ Chưa đúng! Đáp án đúng là: <b>${correctText}</b> / Incorrect! Correct answer is: <b>${correctText}</b></span>`;
+      }
+    }
+
+    /* Web Audio API Synthesized Applause Sound */
+    function playApplauseSound() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const duration = 2.5;
+        const bufferSize = ctx.sampleRate * duration;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.value = 1000;
+        filter.Q.value = 1.2;
+
+        const gainNode = ctx.createGain();
+        gainNode.gain.setValueAtTime(0.01, ctx.currentTime);
+
+        const totalClaps = 70;
+        for (let i = 0; i < totalClaps; i++) {
+          const time = ctx.currentTime + Math.random() * duration;
+          const vol = 0.15 + Math.random() * 0.35;
+          gainNode.gain.setValueAtTime(vol, time);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, time + 0.04 + Math.random() * 0.04);
+        }
+
+        noise.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        noise.start();
+        noise.stop(ctx.currentTime + duration);
+      } catch (e) {
+        console.log("Audio playback error:", e);
+      }
+    }
+
+    /* Confetti Animation */
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#2563EB', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
+
+      for (let i = 0; i < 140; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          size: Math.random() * 9 + 5,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: Math.random() * 4 - 2,
+          vy: Math.random() * 4 + 3,
+          rot: Math.random() * 360,
+          vRot: Math.random() * 6 - 3
+        });
+      }
+
+      let animationFrame;
+      const startTime = Date.now();
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vRot;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rot * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+          ctx.restore();
+        });
+
+        if (Date.now() - startTime < 4000) {
+          animationFrame = requestAnimationFrame(render);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          cancelAnimationFrame(animationFrame);
+        }
+      }
+
+      render();
+    }
+
+    /* Submit & Calculate Results */
+    function submitTest() {
+      let correctCount = 0;
+      for (const k in userAnswers) {
+        if (userAnswers[k] === true) correctCount++;
+      }
+
+      const percentage = Math.round((correctCount / TOTAL_SCORED_QUESTIONS) * 100);
+
+      const modal = document.getElementById('result-modal');
+      const circle = document.getElementById('modal-score-circle');
+      const title = document.getElementById('modal-title');
+      const detail = document.getElementById('modal-detail');
+
+      circle.innerText = `${percentage}%`;
+      detail.innerText = `Bạn đã hoàn thành đúng / Correct answers: ${correctCount} / ${TOTAL_SCORED_QUESTIONS} mục (items).`;
+
+      if (percentage >= 80) {
+        circle.className = 'score-circle high';
+        title.innerHTML = '🎉 Xuất sắc! / Outstanding! 🎉<br><span style="font-size:1rem; color:#10B981;">太棒了！你太厉害了！</span>';
+        modal.classList.add('active');
+        playApplauseSound();
+        launchConfetti();
+      } else {
+        circle.className = 'score-circle';
+        title.innerHTML = '💪 Cố gắng hơn nhé! / Keep Trying!<br><span style="font-size:1rem; color:#2563EB;">继续加油！</span>';
+        modal.classList.add('active');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('result-modal').classList.remove('active');
+    }
+
+    /* RENDER SKILL 1 */
+    const skill1Data = [
+      { audio: "弟弟", opts: ["弟弟", "妹妹", "哥哥", "姐姐"], ans: 0 },
+      { audio: "小学生", opts: ["大学生", "小学生", "老师", "同学"], ans: 1 },
+      { audio: "朋友", opts: ["同学", "医生", "朋友", "弟弟"], ans: 2 },
+      { audio: "同学", opts: ["同学", "朋友", "妹妹", "小学生"], ans: 0 },
+      { audio: "大三岁", opts: ["小两岁", "大两岁", "大三岁", "小三岁"], ans: 2 }
+    ];
+    function renderSkill1() {
+      document.getElementById('skill1-container').innerHTML = skill1Data.map((q, idx) => `
+        <div class="quiz-card">
+          <div class="q-title">Câu / Question ${idx + 1}</div>
+          <button class="btn btn-audio" onclick="playAudio('${q.audio}', 0.95)" style="margin-bottom: 12px;">🔊 Nghe âm chuẩn / Listen Audio</button>
+          <div class="options-grid">
+            ${q.opts.map((opt, i) => `
+              <button class="opt-btn" onclick="selectOption(this, ${i === q.ans}, ${q.ans}, 's1-res-${idx}', 's1_${idx}')">${opt}</button>
+            `).join('')}
+          </div>
+          <div class="result-msg" id="s1-res-${idx}"></div>
+        </div>
+      `).join('');
+    }
+
+    /* RENDER SKILL 2 */
+    const skill2Data = [
+      { vi: "Chữ Hán nào có nghĩa là 'Em trai'?", en: "Which character means 'Younger brother'?", opts: ["弟", "妹", "哥", "姐"], ans: 0 },
+      { vi: "Chữ Hán nào có nghĩa là 'So sánh / Hơn'?", en: "Which character means 'Compare / Than'?", opts: ["北", "比", "批", "此"], ans: 1 },
+      { vi: "Chữ Hán nào có nghĩa là 'Tuổi'?", en: "Which character means 'Years old'?", opts: ["步", "多", "岁", "极"], ans: 2 },
+      { vi: "Từ nào dưới đây có nghĩa là 'Bạn học'?", en: "Which word means 'Classmate'?", opts: ["同学", "朋友", "学生", "老师"], ans: 0 },
+      { vi: "Chữ Hán nào có nghĩa là 'Cũng'?", en: "Which character means 'Also / Too'?", opts: ["他", "地", "也", "她"], ans: 2 }
+    ];
+    function renderSkill2() {
+      document.getElementById('skill2-container').innerHTML = skill2Data.map((q, idx) => `
+        <div class="quiz-card">
+          <div class="q-title">Câu / Question ${idx + 1}: ${q.vi}</div>
+          <div class="q-sub" style="color: #64748B;">${q.en}</div>
+          <div class="options-grid">
+            ${q.opts.map((opt, i) => `
+              <button class="opt-btn" onclick="selectOption(this, ${i === q.ans}, ${q.ans}, 's2-res-${idx}', 's2_${idx}')">${opt}</button>
+            `).join('')}
+          </div>
+          <div class="result-msg" id="s2-res-${idx}"></div>
+        </div>
+      `).join('');
+    }
+
+    /* RENDER SKILL 3 */
+    const skill3Data = [
+      {
+        q: "马丁 _____ 我大三岁。",
+        audio: "马丁，我大三岁。",
+        trans: "Dịch nghĩa: Martin _____ lớn hơn tôi 3 tuổi.",
+        opts: ["是", "比", "也", "和"],
+        ans: 1
+      },
+      {
+        q: "下列哪句话结构正确？",
+        audio: "下列哪句话结构正确？",
+        trans: "Dịch nghĩa: Câu nào dưới đây có cấu trúc so sánh đúng chuẩn?",
+        opts: ["我比他大三岁。", "我大三岁比他。", "我比他三岁大。", "我大比他三岁。"],
+        ans: 0
+      },
+      {
+        q: "苏珊和马丁是同学，_____是小学生。",
+        audio: "苏珊和马丁是同学，也是小学生。",
+        trans: "Dịch nghĩa: Susan và Martin là bạn học, _____ là học sinh tiểu học.",
+        opts: ["也", "比", "很", "不"],
+        ans: 0
+      },
+      {
+        q: "“哥哥比姐姐高很多”是什么意思？",
+        audio: "哥哥比姐姐高很多，是什么意思？",
+        trans: "Dịch nghĩa: Câu “哥哥比姐姐高很多” có nghĩa là gì?",
+        opts: ["Anh trai cao hơn chị gái rất nhiều", "Anh trai cao bằng chị gái", "Chị gái cao hơn anh trai", "Anh trai thấp hơn chị gái"],
+        ans: 0
+      },
+      {
+        q: "姐姐比我高，我 _____ 弟弟高。",
+        audio: "姐姐比我高，我比弟弟高。",
+        trans: "Dịch nghĩa: Chị gái cao hơn tôi, tôi _____ em trai cao.",
+        opts: ["也", "比", "和", "是"],
+        ans: 1
+      }
+    ];
+    function renderSkill3() {
+      document.getElementById('skill3-container').innerHTML = skill3Data.map((q, idx) => `
+        <div class="quiz-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+            <div class="q-title" style="margin-bottom: 0;">Câu ${idx + 1}: ${q.q}</div>
+            <button class="btn btn-audio" style="padding: 5px 12px; font-size: 0.85rem;" onclick="playAudio('${q.audio}', 0.95)">🔊 Nghe câu / Listen</button>
+          </div>
+          <div class="q-sub">${q.trans}</div>
+          <div class="options-grid">
+            ${q.opts.map((opt, i) => `
+              <button class="opt-btn" onclick="selectOption(this, ${i === q.ans}, ${q.ans}, 's3-res-${idx}', 's3_${idx}')">${opt}</button>
+            `).join('')}
+          </div>
+          <div class="result-msg" id="s3-res-${idx}"></div>
+        </div>
+      `).join('');
+    }
+
+    /* RENDER SKILL 4 */
+    const skill4Data = [
+      {
+        q: "苏珊和马丁是什么关系？",
+        trans: "Dịch nghĩa: Susan và Martin có mối quan hệ gì?",
+        opts: ["同学 (Bạn học)", "兄弟 (Anh em)", "师生 (Thầy trò)", "母子 (Mẹ con)"],
+        ans: 0
+      },
+      {
+        q: "马丁今年几岁？",
+        trans: "Dịch nghĩa: Martin năm nay mấy tuổi?",
+        opts: ["8岁", "10岁", "11岁", "12岁"],
+        ans: 2
+      },
+      {
+        q: "马丁比“我”大几岁？",
+        trans: "Dịch nghĩa: Martin lớn hơn “tôi” mấy tuổi?",
+        opts: ["2岁", "3岁", "4岁", "1岁"],
+        ans: 1
+      },
+      {
+        q: "苏珊比“我”大几岁？",
+        trans: "Dịch nghĩa: Susan lớn hơn “tôi” mấy tuổi?",
+        opts: ["1岁", "2岁", "3岁", "4岁"],
+        ans: 1
+      },
+      {
+        q: "谁最高？",
+        trans: "Dịch nghĩa: Ai là người cao nhất trong bài?",
+        opts: ["我 (Tôi)", "姐姐 (Chị gái)", "哥哥 (Anh trai)", "弟弟 (Em trai)"],
+        ans: 2
+      }
+    ];
+    function renderSkill4() {
+      document.getElementById('skill4-container').innerHTML = skill4Data.map((q, idx) => `
+        <div class="quiz-card">
+          <div class="q-title">Câu ${idx + 1}: ${q.q}</div>
+          <div class="q-sub">${q.trans}</div>
+          <div class="options-grid">
+            ${q.opts.map((opt, i) => `
+              <button class="opt-btn" onclick="selectOption(this, ${i === q.ans}, ${q.ans}, 's4-res-${idx}', 's4_${idx}')">${opt}</button>
+            `).join('')}
+          </div>
+          <div class="result-msg" id="s4-res-${idx}"></div>
+        </div>
+      `).join('');
+    }
+
+    /* RENDER SKILL 5 */
+    const skill5Data = [
+      { zh: "马丁比我大三岁。", py: "Mǎdīng bǐ wǒ dà sān suì.", vi: "Martin lớn hơn con 3 tuổi.", en: "Martin is 3 years older than me." },
+      { zh: "苏珊和马丁是同学，也是小学生。", py: "Sūshān hé Mǎdīng shì tóngxué, yě shì xiǎoxuéshēng.", vi: "Susan và Martin là bạn học, cũng là học sinh tiểu học.", en: "Susan and Martin are classmates and also primary students." },
+      { zh: "哥哥比姐姐高，姐姐比我高。", py: "Gēge bǐ jiějie gāo, jiějie bǐ wǒ gāo.", vi: "Anh trai cao hơn chị gái, chị gái cao hơn tôi.", en: "Older brother is taller than older sister, older sister is taller than me." },
+      { zh: "我们比大黄高很多。", py: "Wǒmen bǐ Dàhuáng gāo hěn duō.", vi: "Chúng tôi cao hơn Đại Hoàng rất nhiều.", en: "We are much taller than Dahuang." },
+      { zh: "他们是我的好朋友。", py: "Tāmen shì wǒ de hǎo péngyou.", vi: "Họ là bạn tốt của tôi.", en: "They are my good friends." }
+    ];
+    function renderSkill5() {
+      document.getElementById('skill5-container').innerHTML = skill5Data.map((item) => `
+        <div class="audio-card">
+          <div style="font-size:1.3rem; font-weight:bold; color:#1E293B;">${item.zh}</div>
+          <div style="color:#D97706; font-size:0.95rem; margin-top:2px;">${item.py}</div>
+          <div style="color:#475569; font-size:0.9rem; margin-top:4px;"><b>VI:</b> ${item.vi}</div>
+          <div style="color:#64748B; font-size:0.88rem;"><b>EN:</b> ${item.en}</div>
+          <div class="speed-btn-group">
+            <button class="btn btn-audio" onclick="playAudio('${item.zh}', 0.82)">🐢 Đọc chậm / Slow (0.82x)</button>
+            <button class="btn btn-primary" onclick="playAudio('${item.zh}', 1.0)">🐇 Tự nhiên / Normal (1.0x)</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* RENDER SKILL 6 */
+    const skill6Data = [
+      { char: "比", pinyin: "bǐ", vi: "So sánh / Hơn", count: "4 nét" },
+      { char: "岁", pinyin: "suì", vi: "Tuổi", count: "6 nét" },
+      { char: "弟", pinyin: "dì", vi: "Em trai", count: "7 nét" },
+      { char: "妹", pinyin: "mèi", vi: "Em gái", count: "8 nét" },
+      { char: "友", pinyin: "yǒu", vi: "Bạn bè", count: "4 nét" }
+    ];
+
+    let quizWriters = {};
+    let loopWriters = {};
+    let isSkill6Loaded = false;
+
+    function renderSkill6HTML() {
+      document.getElementById('skill6-container').innerHTML = skill6Data.map((item, idx) => `
+        <div class="hanzi-card">
+          <div class="char-header">Chữ "${item.char}" (${item.pinyin})</div>
+          <div class="char-sub">${item.vi} • ${item.count}</div>
+
+          <div class="hanzi-box-container">
+            <!-- Ô CHỮ MẪU CHẠY GIF -->
+            <div class="hanzi-unit">
+              <div class="hanzi-unit-label" style="color: #D97706;">Mẫu Bút Thuận (GIF)</div>
+              <div id="anim-char-${idx}" class="stroke-box gif-box"></div>
+            </div>
+
+            <!-- Ô LUYỆN VIẾT BẮT BUỘC ĐÚNG THỨ TỰ -->
+            <div class="hanzi-unit">
+              <div class="hanzi-unit-label" style="color: #2563EB;">Tập viết (Đúng nét mới qua)</div>
+              <div id="quiz-char-${idx}" class="stroke-box quiz-box"></div>
+            </div>
+          </div>
+
+          <div id="quiz-status-${idx}" class="status-msg">
+            <span style="color: #64748B;">✍️ Viết nét đầu tiên vào ô bên phải...</span>
+          </div>
+
+          <button class="btn btn-secondary" style="font-size:0.75rem; padding: 4px 14px;" onclick="resetHanziQuiz(${idx}, '${item.char}')">Viết lại / Reset</button>
+        </div>
+      `).join('');
+    }
+
+    function initSkill6() {
+      if (isSkill6Loaded) return;
+      isSkill6Loaded = true;
+
+      skill6Data.forEach((item, idx) => {
+        const animBox = document.getElementById(`anim-char-${idx}`);
+        if (animBox) {
+          animBox.innerHTML = '';
+          loopWriters[idx] = HanziWriter.create(`anim-char-${idx}`, item.char, {
+            width: 100,
+            height: 100,
+            padding: 5,
+            strokeColor: '#D97706',
+            radicalColor: '#2563EB',
+            showOutline: true,
+            outlineColor: '#FDE68A',
+            strokeAnimationSpeed: 1.2,
+            delayBetweenStrokes: 160,
+            delayBetweenLoops: 1200
+          });
+          loopWriters[idx].loopCharacterAnimation();
+        }
+
+        startHanziQuiz(idx, item.char);
+      });
+    }
+
+    function startHanziQuiz(idx, char) {
+      const quizBox = document.getElementById(`quiz-char-${idx}`);
+      if (!quizBox) return;
+      quizBox.innerHTML = '';
+      const statusBox = document.getElementById(`quiz-status-${idx}`);
+
+      quizWriters[idx] = HanziWriter.create(`quiz-char-${idx}`, char, {
+        width: 100,
+        height: 100,
+        padding: 5,
+        showOutline: true,
+        outlineColor: '#E2E8F0',
+        strokeColor: '#1D4ED8',
+        highlightColor: '#10B981',
+        drawingWidth: 18,
+        showHintAfterMisses: 1
+      });
+
+      quizWriters[idx].quiz({
+        onCorrectStroke: function(strokeData) {
+          statusBox.innerHTML = `<span style="color: #0284C7;">👍 Đúng nét thứ ${strokeData.strokeNum + 1}! Viết tiếp...</span>`;
+        },
+        onMistake: function(strokeData) {
+          statusBox.innerHTML = `<span style="color: #EF4444;">⚠️ Sai thứ tự nét! Hãy nhìn mẫu GIF bên cạnh và viết lại nét này.</span>`;
+        },
+        onComplete: function(summary) {
+          userAnswers[`s6_${idx}`] = true;
+          updateFooterProgress();
+          statusBox.innerHTML = `<span class="badge-passed">🎉 Đã viết đúng thứ tự nét! (Đồng ý cho qua)</span>`;
+        }
+      });
+    }
+
+    function resetHanziQuiz(idx, char) {
+      delete userAnswers[`s6_${idx}`];
+      updateFooterProgress();
+      document.getElementById(`quiz-status-${idx}`).innerHTML = `<span style="color: #64748B;">✍️ Viết nét đầu tiên vào ô bên phải...</span>`;
+      startHanziQuiz(idx, char);
+    }
+
+    /* RENDER SKILL 7 */
+    const skill7Data = [
+      { vi: "Martin lớn hơn con 3 tuổi.", en: "Martin is 3 years older than me.", tokens: ["马丁", "比", "我", "大", "三岁"], ans: "马丁比我大三岁" },
+      { vi: "Các bạn ấy cũng là học sinh tiểu học.", en: "They are also primary school students.", tokens: ["他们", "也", "是", "小学生"], ans: "他们也是小学生" },
+      { vi: "Anh trai cao hơn chị gái.", en: "Older brother is taller than older sister.", tokens: ["哥哥", "比", "姐姐", "高"], ans: "哥哥比姐姐高" },
+      { vi: "Susan lớn hơn tôi 2 tuổi.", en: "Susan is 2 years older than me.", tokens: ["苏珊", "比", "我", "大", "两岁"], ans: "苏珊比我大两岁" },
+      { vi: "Chúng tôi cao hơn Đại Hoàng rất nhiều.", en: "We are much taller than Dahuang.", tokens: ["我们", "比", "大黄", "高", "很多"], ans: "我们比大黄高很多" }
+    ];
+    function renderSkill7() {
+      document.getElementById('skill7-container').innerHTML = skill7Data.map((q, idx) => {
+        const shuffled = [...q.tokens].sort(() => Math.random() - 0.5);
+        return `
+          <div class="quiz-card">
+            <div class="q-title">Câu / Question ${idx + 1}: ${q.vi}</div>
+            <div class="q-sub" style="color: #64748B;">${q.en}</div>
+            <div class="sentence-target" id="target-${idx}"></div>
+            <div class="word-pool" id="pool-${idx}">
+              ${shuffled.map(t => `<div class="chip" onclick="moveChip(this, ${idx})">${t}</div>`).join('')}
+            </div>
+            <div style="display:flex; gap:10px; margin-top:10px;">
+              <button class="btn btn-primary" onclick="checkS7(${idx})">Kiểm tra / Check</button>
+              <button class="btn btn-secondary" onclick="resetS7(${idx})">Đặt lại / Reset</button>
+            </div>
+            <div class="result-msg" id="s7-res-${idx}"></div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function moveChip(chip, qIdx) {
+      const target = document.getElementById(`target-${qIdx}`);
+      const pool = document.getElementById(`pool-${qIdx}`);
+      if (chip.parentElement === pool) target.appendChild(chip);
+      else pool.appendChild(chip);
+    }
+
+    function checkS7(qIdx) {
+      const chips = document.getElementById(`target-${qIdx}`).querySelectorAll('.chip');
+      const assembled = Array.from(chips).map(c => c.innerText.trim()).join('');
+      const isCorrect = assembled === skill7Data[qIdx].ans;
+
+      userAnswers[`s7_${qIdx}`] = isCorrect;
+      updateFooterProgress();
+
+      const res = document.getElementById(`s7-res-${qIdx}`);
+      if (isCorrect) {
+        res.innerHTML = "<span style='color:var(--secondary);'>✔ Ghép câu chính xác! / Correct arrangement! 太棒了！</span>";
+        playAudio(assembled, 0.95);
+      } else {
+        res.innerHTML = `<span style='color:var(--danger);'>✘ Chưa đúng thứ tự! Đáp án đúng là: <b>${skill7Data[qIdx].ans}</b> / Incorrect! Correct sentence is: <b>${skill7Data[qIdx].ans}</b></span>`;
+      }
+    }
+
+    function resetS7(qIdx) {
+      const target = document.getElementById(`target-${qIdx}`);
+      const pool = document.getElementById(`pool-${qIdx}`);
+      target.querySelectorAll('.chip').forEach(c => pool.appendChild(c));
+      document.getElementById(`s7-res-${qIdx}`).innerHTML = '';
+      delete userAnswers[`s7_${qIdx}`];
+      updateFooterProgress();
+    }
+
+    window.onload = function() {
+      renderSkill1(); renderSkill2(); renderSkill3();
+      renderSkill4(); renderSkill5(); renderSkill6HTML(); renderSkill7();
+      updateFooterProgress();
+    };
+  </script>
+</body>
+</html>
